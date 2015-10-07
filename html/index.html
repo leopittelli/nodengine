@@ -1,0 +1,63 @@
+<html>
+	<head>
+		<title>Running Node.js on App Engine</title>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+	</head>
+	<body>
+		<header>
+			<div class="inner">
+				<a href="/"><img class="logo" alt="logo" src="images/logo.png"></a>
+				<a href="https://www.twitter.com/leopittelli" target="_blank"><img src="images/twitter.png">@leopittelli</a>
+			</div>
+		</header>
+		<a href="https://github.com/leopittelli/nodengine" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="images/forkme.png" alt="Fork me on GitHub"></a>
+		<div id="main-container">
+			<h1>Running Node.js on App Engine</h1>
+			<div class="tweets-panel">
+				<h1>Tweets for {{ track }}</h1>
+				<div class="panel-list">
+					{{#tweets_data.statuses}}
+					<div class="tweet">
+			    		<div class="user">
+				    		<img src="{{ user.profile_image_url }} " width="50" height="50" />
+							<a class="link" target="_blank" href="http://twitter.com/{{ user.screen_name }}">@{{ user.screen_name }}</a>
+						</div>
+						<p>{{ text }}</p>
+						{{#entities.media}}
+							<a target="_blank" href="{{ media_url_https }}">
+								<img class="twitter-image" src="{{ media_url_https }}" />
+							</a>
+						{{/entities.media}}
+			    	</div>
+			    	{{/tweets_data.statuses}}
+				</div>
+			</div>
+		</div>
+
+		<script>
+			function showTweet(tweetType, data, clazz) {
+				var media = "";
+				if (data.entities.media) {
+					for (var i = 0; i < data.entities.media.length; i++) {
+						if (data.entities.media[i].type == "photo") {
+							media = media + '<a target="_blank" href="' + data.entities.media[i].media_url_https + '"><img class="twitter-image" src="' + data.entities.media[i].media_url_https + '" /></a>';
+						}
+					};
+				}
+				var tweet = '<div class="tweet ' + clazz + '">' +
+			    		'<h2>New tweet</h2>' +
+			    		'<div class="user">' +
+				    		'<img src="' + data.user.profile_image_url + '" width="50" height="50" />' +
+							'<a class="link" target="_blank" href="http://twitter.com/' + data.user.screen_name + '">@' + data.user.screen_name + '</a>' +
+						'</div>' +
+						'<p>' + data.text + '</p>' +
+						media +
+			    	'</div>';
+
+				// Append the tweet
+			    document.getElementById('tweets-'+tweetType).insertAdjacentHTML('afterbegin', tweet);
+			}
+		</script>
+
+	</body>
+</html>
