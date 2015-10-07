@@ -36,9 +36,10 @@ var T = new Twit({
 // Render index.html
 var track = "#Twitter";
 app.get('/', function(req, res) {
-	T.get('search/tweets', { q: track, count: 10 }, function(err, data, response) {
+	var searchTrack = req.query.q || track;
+	T.get('search/tweets', { q: searchTrack, count: 10 }, function(err, data, response) {
 	  res.status(200).render('index', {
-		track: track,
+		track: searchTrack,
 		tweets_data: data
 	  });
 	});
